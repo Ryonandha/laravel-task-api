@@ -41,4 +41,55 @@ class TaskController extends Controller
             'data' => $task
         ], 201);
     }
+
+    // 3. GET /api/tasks/{id} (Melihat detail 1 tugas spesifik)
+    public function show($id)
+    {
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json(['message' => 'Task not found'], 404);
+        }
+
+        return response()->json(['data' => $task], 200);
+    }
+
+    // 4. PUT /api/tasks/{id} (Update tugas)
+    public function update(Request $request, $id)
+    {
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json(['message' => 'Task not found'], 404);
+        }
+
+        // Validasi input (boleh diisi sebagian saja / nullable)
+        $validated = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'in:pending,in_progress,completed',
+            'category_id' => 'nullable|exists:categories,id',
+        ]);
+
+        $task->update($validated);
+
+        return response()->json([
+            'message' => 'Task updated successfully',
+            'data' => $task
+        ], 200);
+    }
+
+    // 5. DELETE /api/tasks/{id} (Hapus tugas)
+    public function destroy($id)
+    {
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json(['message' => 'Task not found'], 404);
+        }
+
+        $task->delete();
+
+        return response()->json(['message' => 'Task deleted successfully'], 200);
+    }
 }
