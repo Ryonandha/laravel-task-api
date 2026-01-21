@@ -8,4 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     use HasFactory;
+
+    // Tambahkan bagian ini agar Laravel mengizinkan data ini disimpan
+    protected $fillable = [
+        'title',
+        'description',
+        'status',
+        'due_date',
+        'category_id',
+        'user_id'
+    ];
+
+    // Opsional: Definisikan relasi (biar rapi)
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
