@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     // 1. GET /api/tasks (Melihat semua tugas)
-    public function index()
+    public function index(Request $request)
     {
         // Ambil semua data task, urutkan dari yang terbaru
-        $tasks = Task::latest()->get();
+        $tasks = Task::where('user_id', $request->user()->id)->latest()->get();
 
         return response()->json([
-            'message' => 'List of all tasks',
+            'message' => 'List of your tasks', // Ubah pesan jadi lebih personal
             'data' => $tasks
         ], 200);
     }
@@ -28,13 +28,13 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'status' => 'in:pending,in_progress,completed',
             'category_id' => 'nullable|exists:categories,id',
-            // Kita hardcode user_id = 1 dulu karena belum bikin Login
-            // Nanti kita ganti jadi auth()->id()
         ]);
 
         // Simpan ke database
         // PENTING: Tambahkan 'user_id' manual sementara
-        $task = Task::create(array_merge($validated, ['user_id' => 1]));
+        $task = Task::create(array_merge($validated, [
+            'user_id' => $request->user()->id
+        ]));
 
         return response()->json([
             'message' => 'Task created successfully',
