@@ -36,4 +36,41 @@ class AuthController extends Controller
             'token_type' => 'Bearer'
         ], 201);
     }
+    // LOGIN
+    public function login(Request $request)
+    {
+        // 1. Validasi
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // 2. Cek apakah user ada
+        $user = User::where('email', $request->email)->first();
+
+        // 3. Cek password
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Invalid login details'
+            ], 401);
+        }
+
+        // 4. Buat token baru
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login success',
+            'access_token' => $token,
+            'token_type' => 'Bearer'
+        ]);
+    }
+
+    // LOGOUT
+    public function logout(Request $request)
+    {
+        // Hapus token yang sedang dipakai
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully']);
+    }
 }
