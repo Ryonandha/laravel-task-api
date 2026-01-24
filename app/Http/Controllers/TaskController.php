@@ -11,7 +11,10 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         // Ambil semua data task, urutkan dari yang terbaru
-        $tasks = Task::where('user_id', $request->user()->id)->latest()->get();
+        $tasks = Task::with('category')
+        ->where('user_id', $request->user()->id)
+        ->latest()
+        ->get();
 
         return response()->json([
             'message' => 'List of your tasks', // Ubah pesan jadi lebih personal
@@ -45,7 +48,7 @@ class TaskController extends Controller
     // 3. GET /api/tasks/{id} (Melihat detail 1 tugas spesifik)
     public function show($id)
     {
-        $task = Task::find($id);
+        $task = Task::with('category')->find($id);
 
         if (!$task) {
             return response()->json(['message' => 'Task not found'], 404);
