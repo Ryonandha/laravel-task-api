@@ -10,14 +10,29 @@ class TaskController extends Controller
     // 1. GET /api/tasks (Melihat semua tugas)
     public function index(Request $request)
     {
-        // Ambil semua data task, urutkan dari yang terbaru
-        $tasks = Task::with('category')
-        ->where('user_id', $request->user()->id)
-        ->latest()
-        ->get();
+        // 1. Siapkan Query dasar (User hanya lihat tugas miliknya & load kategori)
+        $query = Task::with('category')->where('user_id', $request->user()->id);
+
+        // 2. Fitur Filter Status (Contoh: ?status=pending)
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // 3. Fitur Filter Kategori (Contoh: ?category_id=2)
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // 4. Fitur Pencarian Judul (Contoh: ?search=belajar)
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        // 5. Eksekusi Query (Ambil data)
+        $tasks = $query->latest()->get();
 
         return response()->json([
-            'message' => 'List of your tasks', // Ubah pesan jadi lebih personal
+            'message' => 'Tasks retrieved successfully',
             'data' => $tasks
         ], 200);
     }
