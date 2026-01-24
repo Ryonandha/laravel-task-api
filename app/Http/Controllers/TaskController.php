@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTaskRequest;
 
 class TaskController extends Controller
 {
@@ -38,24 +39,17 @@ class TaskController extends Controller
     }
 
     // 2. POST /api/tasks (Membuat tugas baru)
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
         // Validasi input dari user
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'in:pending,in_progress,completed',
-            'category_id' => 'nullable|exists:categories,id',
-        ]);
+        $validated = $request->validated();
 
-        // Simpan ke database
-        // PENTING: Tambahkan 'user_id' manual sementara
         $task = Task::create(array_merge($validated, [
-            'user_id' => $request->user()->id
+            'user_id' => $request->user()->id 
         ]));
 
         return response()->json([
-            'message' => 'Task created successfully',
+            'message' => 'Tugas berhasil dibuat!', // Sekalian indonesiakan respon suksesnya
             'data' => $task
         ], 201);
     }
