@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,8 @@ use App\Http\Controllers\AuthController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Pindahkan route tasks ke dalam sini agar aman!
     Route::apiResource('tasks', TaskController::class);
+    Route::apiResource('categories', CategoryController::class); // <--- Tambahkan ini
 });
 Route::apiResource('tasks', TaskController::class);
 Route::post('/register', [AuthController::class, 'register']);
