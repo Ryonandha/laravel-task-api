@@ -1,73 +1,39 @@
-# 🚀 Laravel Task Manager API
+# Laravel Task Manager API
 
-Restful API sederhana namun powerful untuk manajemen tugas harian. Proyek ini dibangun untuk mendemonstrasikan kemampuan pengembangan Backend menggunakan **Laravel**, arsitektur **REST API**, dan manajemen **Database Relasional**.
+RESTful API untuk manajemen tugas harian: CRUD lengkap, autentikasi Sanctum, filtering & pagination. Dibangun untuk mendemonstrasikan arsitektur backend Laravel yang bersih dan terstruktur.
 
-## 🛠 Teknologi yang Digunakan
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP_8.3-777BB4?logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-000000?logo=mysql&logoColor=white)
 
-- **Framework:** Laravel 10/11
-- **Language:** PHP 8.x
-- **Database:** MySQL
-- **Tools:** Postman (untuk testing), Git
+## Endpoint
 
-## 📝 Fitur & Roadmap
+| Method | Endpoint | Deskripsi |
+|---|---|---|
+| POST | `/api/register` | Registrasi user |
+| POST | `/api/login` | Login → dapatkan token |
+| GET | `/api/tasks` | Daftar tugas (filter: status, search, pagination) |
+| POST | `/api/tasks` | Buat tugas baru |
+| GET | `/api/tasks/{id}` | Detail tugas |
+| PUT | `/api/tasks/{id}` | Update tugas |
+| DELETE | `/api/tasks/{id}` | Hapus tugas |
 
-Berikut adalah status pengembangan fitur saat ini:
+Semua endpoint butuh token `Authorization: Bearer <token>` kecuali register & login.
 
-- [x] **Setup Project & Database** (Migrations)
-- [x] **Task Management (CRUD)**
-    - [x] Melihat daftar tugas (`GET`)
-    - [x] Membuat tugas baru (`POST`)
-    - [x] Detail tugas spesifik (`GET`)
-    - [x] Update tugas (`PUT`)
-    - [x] Hapus tugas (`DELETE`)
-- [ ] **Kategori Tugas** (Relasi One-to-Many)
-- [ ] **Authentication** (Register & Login dengan Sanctum)
-- [ ] **Filter & Sorting** (Filter berdasarkan status/kategori)
-- [ ] **API Documentation**
+## Menjalankan lokal
 
-## 🔌 Dokumentasi Endpoint (Sementara)
+```bash
+git clone https://github.com/Ryonandha/laravel-task-api.git
+cd laravel-task-api
+composer install
+cp .env.example .env && php artisan key:generate
+# atur DB_CONNECTION, DB_DATABASE, dll. di .env
+php artisan migrate --seed
+php artisan serve
+```
 
-| Method   | Endpoint          | Deskripsi                  | Status   |
-| :------- | :---------------- | :------------------------- | :------- |
-| `GET`    | `/api/tasks`      | Mengambil semua data tugas | ✅ Ready |
-| `POST`   | `/api/tasks`      | Membuat tugas baru         | ✅ Ready |
-| `GET`    | `/api/tasks/{id}` | Melihat detail 1 tugas     | ✅ Ready |
-| `PUT`    | `/api/tasks/{id}` | Update data tugas          | ✅ Ready |
-| `DELETE` | `/api/tasks/{id}` | Menghapus tugas            | ✅ Ready |
-
-## 💻 Cara Menjalankan Project (Installation)
-
-Jika Anda ingin mencoba menjalankan project ini di lokal:
-
-1.  **Clone Repository**
-
-    ```bash
-    git clone [https://github.com/Ryonandha/laravel-task-api.git](https://github.com/Ryonandha/laravel-task-api.git)
-    cd laravel-task-api
-    ```
-
-2.  **Install Dependencies**
-
-    ```bash
-    composer install
-    ```
-
-3.  **Setup Environment**
-    - Duplikat file `.env.example` menjadi `.env`.
-    - Sesuaikan konfigurasi database (DB_DATABASE, DB_USERNAME, dll).
-
-4.  **Generate Key & Migrate**
-
-    ```bash
-    php artisan key:generate
-    php artisan migrate
-    ```
-
-5.  **Jalankan Server**
-    ```bash
-    php artisan serve
-    ```
+Test via Postman/Insomnia: import `postman/collection.json` (tersedia di repo).
 
 ---
 
-_Dibuat sebagai bagian dari latihan portofolio Backend Developer._
+Dibuat oleh [Ryonandha](https://github.com/Ryonandha) · 2026
